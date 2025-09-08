@@ -1,0 +1,31 @@
+name: Collect Meme Coins Data
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  collect-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+      
+    - name: Run data collection
+      run: python scripts/data_collector.py
+      
+    - name: Upload data as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: meme-coins-data
+        path: data/*.csv
